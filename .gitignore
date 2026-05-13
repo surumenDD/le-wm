@@ -30,6 +30,5 @@ wandb/
 .vscode/
 
 # Temporary
-*.tmp
 *.bak
 *.log
