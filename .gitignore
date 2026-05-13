@@ -1,0 +1,35 @@
+# Environment marker (machine-local, see CLAUDE.md)
+今の環境.md
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# uv / virtualenv
+.venv/
+venv/
+.python-version
+
+# Hydra outputs
+outputs/
+multirun/
+
+# W&B
+wandb/
+
+# stable-worldmodel default cache
+.stable-wm/
+
+# Editor / OS
+.DS_Store
+.idea/
+.vscode/
+
+# Temporary
+*.tmp
+*.bak
+*.log
