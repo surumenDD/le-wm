@@ -1,0 +1,120 @@
+\section{Experiments}
+
+\subsection{Experiment settings}
+
+We conduct our experiments in two environments under an offline reinforcement learning setting. Models are trained with random trajectories sampled in the environments. The states used as inputs to our models are observation images, potentially including additional sensory information. A detailed description of the datasets used is provided in the Appendix \ref{app:dataset}.
+
+The wall environment consists of a square space separated by a wall with a door. The positions of the wall and door are randomly initialized when the environment is instantiated. The agent has to move from a random starting position to a random goal located on the opposite side of the wall. It can execute actions that are vectors corresponding to displacements. We generate datasets with two settings: WS, with actions of small norms, and WB, with actions of larger norms.
+
+The maze environment consists of an agent that must move from a random starting point to a random goal within a random maze. Its actions are velocity commands. Planning in this environment requires that both the agent's position and velocity be encoded in the representations, as it simulates inertia. Following a similar approach to \cite{sobal2025learningrewardfreeofflinedata}, we include the agent's velocity as an input to the encoders for a given state.
+
+
+
+\subsection{Planning with the representations}
+We conduct experiments to evaluate the planning performance of different learning methods. Specifically, we train JEPA models with:
+
+
+  \begin{table}[h]
+  \centering
+  
+  % First half of the table
+  \begin{minipage}{0.47\textwidth}
+    \centering
+    \begin{tabular}{|c||c|c|}
+        \hline
+        Name& State encoder loss&Sep\\
+        \hline\hline
+        Contrastive & $\mathcal{L}_\text{contrastive}$ & \checkmark\\
+        \hline
+        Regressive & $\mathcal{L}_\text{regressive}$ \& $\mathcal{L}_\text{VCReg}$ & \checkmark\\
+        \hline
+        pred\_VCReg& $\mathcal{L}_\text{VCReg}$ &$\times$\\
+        \hline
+        pred\_EMA& EMA procedure &$\times$\\
+        \hline
+        VF & $\mathcal{L}_\text{VF}$ & \checkmark \\
+        \hline
+    \end{tabular}
+  \end{minipage}
+  \hfill
+  % Second half of the table
+  \begin{minipage}{0.52\textwidth}
+    \centering
+    \begin{tabular}{|c||c|c|}
+        \hline
+        Name& State encoder loss &Sep\\
+        \hline\hline
+        VF\_pred & $\mathcal{L}_\text{VF}$  & $\times$ \\
+        \hline
+        VF\_quasi &$\mathcal{L}_\text{VF}$ \& quasi-distance& \checkmark\\
+        \hline
+        VF\_quasi\_pred & $\mathcal{L}_\text{VF}$ \& quasi-distance& $\times$\\
+        \hline
+        VF\_VCReg & $\mathcal{L}_\text{VF}$ \& $\mathcal{L}_\text{VCReg}$& \checkmark\\
+        \hline
+        VF\_VCReg\_pred& $\mathcal{L}_\text{VF}$ \& $\mathcal{L}_\text{VCReg}$& $\times$\\
+        \hline
+    \end{tabular}
+  \end{minipage}
+
+  \caption{Training approaches}
+  \label{tab:exemple}
+\end{table}
+
+The precise settings of the experiments are described in Appendix \ref{Expsettings}.
+
+We assess the quality of the learned representations by evaluating the planning accuracy of the model, defined as the proportion of successful plans for random pairs of initial states and goals. We compute this success rate on 200 instances of the wall environment and 80 of the maze one, so that the variance of the results is small. We use an MPC procedure with an MPPI optimizer. The results are displayed in Table \ref{tab:results}.
+
+
+
+  \begin{table}[h]
+  \centering
+  
+  % First half of the table
+  \begin{minipage}{0.49\textwidth}
+    \centering
+    \begin{tabular}{|c||c|c|c|}
+        \hline
+        Type & WS & WB & Maze\\
+        \hline \hline
+        Contrastive & 0.49& 0.59&0.50\\
+        \hline
+        Regressive & 0.54&0.57&0.46\\
+        \hline
+        pred\_VCReg & 0.55&0.89&0.54\\
+        \hline
+        pred\_EMA & 0.46&0.43&0.04\\
+        \hline
+        VF & 0.63&0.94&0.49\\
+        \hline
+    \end{tabular}
+  \end{minipage}
+  \hfill
+  % Second half of the table
+  \begin{minipage}{0.49\textwidth}
+    \centering
+    \begin{tabular}{|c||c|c|c|}
+        \hline
+        Type & WS & WB & Maze\\
+        \hline \hline
+        VF\_pred & 0.55  & 0.75&0.49\\
+        \hline
+        VF\_quasi &\textbf{ 0.71 }& \textbf{0.96}&\textbf{0.63}\\
+        \hline
+        VF\_quasi\_pred & 0.61 & 0.85&0.43\\
+        \hline
+        VF\_VCReg & 0.49 &0.75&0.39\\
+        \hline
+        VF\_VCReg\_pred & 0.47&0.67&0.39\\
+        \hline
+    \end{tabular}
+  \end{minipage}
+
+  \caption{Planning results in the different environments}
+  \label{tab:results}
+\end{table}
+
+
+They show that IQL-inspired approaches provide valuable guidance during planning and achieve better results than intuitive or prediction-based approaches, as used in \cite{sobal2025learningrewardfreeofflinedata}. Interestingly, the VF\_quasi approach consistently outperforms the VF approach, even when the theoretical value function is symmetric. This suggests that using a quasi-distance always facilitates the training process by enhancing the expressiveness of the networks.
+
+Learning representations using both a prediction loss and an IQL loss is less effective than using the latter loss alone. Using VCReg to promote diversity when learning with an IQL loss also results in poor planning performance. The results obtained with the WB dataset are better than those obtained with the WS dataset. This may be due to the fact that a single trajectory explores more of the environment in the WB dataset, and that the agent is more likely to collide with the wall.

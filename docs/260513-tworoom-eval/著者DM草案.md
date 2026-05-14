@@ -3,15 +3,47 @@
 ## メタ情報
 
 - **送信先候補**:
-  - Lucas Maes（first author, corresponding author per `le-wm/README.md:127`）— X: `@lucasmaes_`（`paper.cleaned.md:5` / `README.md:5`）
-  - Quentin Le Lidec（co-first author, HF配布者 `quentinll/lewm-tworooms`）— website: <https://quentinll.github.io/>
-- **送信媒体**: X DM（軽量問い合わせ向き）
+  - Lucas Maes（first author, corresponding author per `le-wm/README.md:127`）— X: `@lucasmaes_`（`paper.cleaned.md:5` / `README.md:5`） / Email: `lucas.maes@mila.quebec`（`source/main.tex:103`）
+  - Quentin Le Lidec（co-first author, HF配布者 `quentinll/lewm-tworooms`）— website: <https://quentinll.github.io/> / Email: `quentin.l@nyu.edu`（同 website の Contact links）
+- **送信媒体**: X DM または Email（軽量問い合わせ向き）
 - **代替案**: 公開議論にしたい場合は `lucas-maes/le-wm` の GitHub Issue
 - **言語**: 英語
 - **問い合わせ目的**:
   1. Fig 3 の Two-Room LeWM = 87% を生成したモデルが、論文 Appendix D 記載の `history=1` 版か、HF 公開の `num_frames=3` 版か
   2. `le-wm/README.md` の Google Drive URL が 404 になる事象の報告と、正しい URL の照会
   3. Drive checkpoint への viewer 権限付与依頼（`ryo5211ta@gmail.com`）
+
+## メール送信時の宛先（エビデンス）
+
+### 事実
+
+- 論文中で明示された corresponding email は **`lucas.maes@mila.quebec`** のみ
+  - 出典: `papers/2603.19312_leworldmodel/source/main.tex:103`
+    ```
+    \footnotetext{* Equal contribution. Correspondence to \texttt{lucas.maes@mila.quebec}}
+    ```
+  - 同文が `paper.cleaned.md:15` にも記載
+- Quentin Le Lidec の email は本人の個人サイトで公開
+  - 出典: <https://quentinll.github.io/>（ページ上部 Contact links に `mailto:quentin.l@nyu.edu`）
+  - 補助: arXiv abstract page <https://arxiv.org/abs/2603.19312> の "view email" リンクは Quentin Le Lidec を指す（submitter）
+- 著者所属（`source/main.tex:95-97`）
+  - Lucas Maes (*1) — Mila & Université de Montréal
+  - Quentin Le Lidec (*2) — New York University
+  - Damien Scieur (1,3) — Mila & UdeM, Samsung SAIL
+  - Yann LeCun (2) — NYU
+  - Randall Balestriero (4) — Brown University
+  - `*` は equal contribution
+
+### 現在検討中の点
+
+- Damien Scieur / Yann LeCun / Randall Balestriero の email アドレスは未確認（本件の Two-Room reproduction 質問では corresponding と co-first author の 2 名で十分のため未調査）
+
+### 採用方針
+
+- **To**: `lucas.maes@mila.quebec`（corresponding author として論文に明示されている）
+- **Cc**: `quentin.l@nyu.edu`（任意。co-first author かつ HF checkpoint 配布者で、本件 `num_frames` 質問の対象者）
+- Subject 例: `Reproduction question on LeWorldModel (arXiv:2603.19312): Two-Room history length`
+- 本文は本ファイル「DM 本文（コピペ用、英語）」または「補足オプション A. もっと短くしたい場合」をそのまま流用可。Cc に Quentin を入れる場合は冒頭を `Hi Lucas (and Quentin),` に変更
 
 ## DM 本文（コピペ用、英語）
 

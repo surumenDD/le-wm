@@ -1,0 +1,22 @@
+\section{Value-guided JEPA for action planning}
+
+To improve the planning capabilities of JEPA models, we focus on enhancing the representations used to compute the MPC planning cost. In the standard JEPA framework, planning is performed by minimizing the distance between a predicted state and the goal in the representation space. However, this cost can have numerous local minima, making optimization challenging. To address this, we propose learning representations such that the Euclidean distance in the representation space corresponds to the negative of the goal-conditioned value function associated with a reaching cost in a given environment, as in \cite{hilp}. Unlike previous works, we focus on using these representations for planning with JEPA models and MPC procedures, rather than solely for policy execution. Under this formulation, setting the planning cost to the learned value function and minimizing it naturally drives the model toward the goal.
+
+\subsection{Baseline loss functions}
+To enforce the value function criterion in the representation space, we consider several simple loss functions for the state encoder of a JEPA model, which serve as baselines. Specifically, we apply a contrastive loss $\mathcal{L}_\text{contrastive}$ using successive states from training trajectories as positive examples and random pairs of states as negative examples, as well as a regression loss $\mathcal{L}_\text{regressive}$ explicitly enforcing the distance between successive states to be 1.
+
+\subsection{IQL for JEPA models}
+Let $\mathcal{S}_0$ be the state space, $\theta$ the parameters and $\mathcal{E}_\theta$ the state encoder of a JEPA model. For all \mbox{$(s, g) \in \mathcal{S}_0^2$}, we define $V_\theta(s, g) = -\Vert \mathcal{E}_\theta(s) - \mathcal{E}_\theta(g) \Vert_2$. Our goal is to learn $\theta$ such that $V_\theta$ approximates the goal-conditioned value function $V^\star$ associated with the reaching cost \mbox{$C: (s, a, g) \mapsto \mathbf{1}_{s \neq g}$}, which penalizes all time steps where the state $s$ is not equal to the goal $g$.
+
+Let $(T, N) \in \mathbb{N}^2$ represent the length of the training trajectories and the number of training goals. Let $\mathcal{D}$ be a dataset of trajectories $(s_t)_{t\in\llbracket0,T\rrbracket}$ belonging to $\mathcal{S}_0^{T+1}$ and goals $(g_n)_{n\in\llbracket0,N\rrbracket}$  belonging to $\mathcal{S}_0^{N+1}$. We minimize the mean IQL loss with respect to $\theta$ via gradient descent:
+\begin{equation}
+\forall ((s_t),(g_n)) \in \mathcal{D}, \quad
+\mathcal{L}_\text{VF}^\theta((s_t),(g_n)) = \sum_{n=0}^N \sum_{t=0}^{T-1} 
+L_\tau^2 \Big( -\mathbf{1}_{s_t \neq g_n} + \gamma V_{\bar{\theta}}(s_{t+1}, g_n) - V_\theta(s_t, g_n) \Big),
+\end{equation}
+where $\bar{\cdot}$ denotes a stop-gradient ; $\tau, \gamma \in ]0,1[$ are close to $1$ ; and for all $x \in \mathbb{R},$ the term \mbox{$\; L_\tau^2(x) = |\tau - \mathbf{1}_{x<0}| \, x^2$} performs expectile regression. The parameter $\gamma$ is the discount factor of the value function we aim to learn.
+In practice, we use two different types of goals: the last state of the training trajectories, and random goals sampled from the training batches.
+
+To obtain a better approximation, we further explore replacing the Euclidean distance in the definition of $V_\theta$ with a quasimetric distance, following \cite{wang2023optimalgoalreachingreinforcementlearning}. The quasi-distance used to learn $V^\star$ is the generic form introduced in \cite{wang2022improved}.
+
+We consider two approaches to training JEPA models. The first approach, which we call ``Sep'', consists of training the state encoder alone using the $\mathcal{L}_\text{VF}$ objective, followed by training the action encoder and predictor with the $\mathcal{L}_\text{pred}$ loss. The second approach consists of training all networks together using as objective the sum of $\mathcal{L}_\text{VF}$ and $\mathcal{L}_\text{pred}$.
