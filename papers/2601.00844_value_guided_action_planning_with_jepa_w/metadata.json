@@ -1,0 +1,33 @@
+{
+  "title": "Value-guided action planning with JEPA world models",
+  "authors": [
+    "Matthieu Destrade",
+    "Oumayma Bounou",
+    "Quentin Le Lidec",
+    "Jean Ponce",
+    "Yann LeCun"
+  ],
+  "abstract": "Building deep learning models that can reason about their environment requires capturing its underlying dynamics. Joint-Embedded Predictive Architectures (JEPA) provide a promising framework to model such dynamics by learning representations and predictors through a self-supervised prediction objective. However, their ability to support effective action planning remains limited. We propose an approach to enhance planning with JEPA world models by shaping their representation space so that the negative goal-conditioned value function for a reaching cost in a given environment is approximated by a distance (or quasi-distance) between state embeddings. We introduce a practical method to enforce this constraint during training and show that it leads to significantly improved planning performance compared to standard JEPA models on simple control tasks.",
+  "arxiv_id": "2601.00844v1",
+  "primary_category": "cs.LG",
+  "categories": [
+    "cs.LG",
+    "cs.AI",
+    "cs.RO"
+  ],
+  "published_at": "2025-12-28T20:17:49+00:00",
+  "updated_at": "2025-12-28T20:17:49+00:00",
+  "doi": null,
+  "journal_ref": null,
+  "comment": "Presented as a poster at the World Modeling Workshop 2026, Mila",
+  "source_url": "http://arxiv.org/abs/2601.00844v1",
+  "pdf_url": "https://arxiv.org/pdf/2601.00844v1",
+  "html_url": "https://arxiv.org/html/2601.00844",
+  "ar5iv_url": "https://ar5iv.labs.arxiv.org/html/2601.00844",
+  "local_paths": {
+    "pdf": "paper.pdf",
+    "source_tar": "source.tar.gz",
+    "source_dir": "source",
+    "html": "paper.html"
+  }
+}

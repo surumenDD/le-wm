@@ -1,0 +1,14 @@
+\section{Related work}
+\subsection{JEPA world models}
+ Joint-Embedded Predictive Architectures (JEPA) (\cite{LeCun2022APT}) provide an effective way to implement world models for representation learning and action planning. They rely on the hypothesis that predicting future states is easier in a learned representation space than in the original observation space, and that enforcing predictability encourages meaningful representations. A JEPA model typically consists of a state encoder, an action encoder, and a predictor. It is trained on sequences of states and actions by minimizing a prediction loss, $\mathcal{L}_\text{pred}$, between a predicted representation and that of the actual state resulting from applying a given action. To prevent collapse during training, standard approaches use a VCReg loss, $\mathcal{L}_\text{VCReg}$, as in \cite{sobal2025learningrewardfreeofflinedata}, or an exponential moving average (EMA) scheme, as in \cite{assran2023selfsupervisedlearningimagesjointembedding, bardes2024revisitingfeaturepredictionlearning}.
+ 
+Recent works (\cite{sobal2025learningrewardfreeofflinedata, zhou2025dinowmworldmodelspretrained}) have applied JEPA models to action-planning tasks, showing promising yet still limited performance. To do so, they employ a model predictive control (MPC) procedure (\cite{GARCIA1989335}), which iteratively minimizes a planning loss measuring the distance between predicted and goal representations over a finite horizon. 
+
+
+
+\subsection{Learning a value function}
+
+To improve the effectiveness of MPC, several works have proposed learning a value function to guide the MPC procedure \cite{farshidian2019deepvaluemodelpredictive, jordana2025infinitehorizonvaluefunctionapproximation}. This approach allows MPC to account for longer time horizons, and can stabilize the procedure by providing an additional cost term whose minimization facilitates goal-reaching tasks.
+
+Implicit Q-Learning (IQL) \cite{ghosh2023reinforcementlearningpassivedata, kostrikov2021offlinereinforcementlearningimplicit,xu2023policyguidedimitationapproachoffline} learns a goal-conditioned value function from unlabeled trajectories by leveraging expectile regression. The authors of \cite{hilp} leverage IQL to learn a structured representation space for states of a system, where the negative Euclidean distance approximates a goal-conditioned value function corresponding to the terminal cost in a reaching objective. They show that these representations enable solving various reinforcement learning tasks efficiently. Since a goal-conditioned value function is not symmetric in general, additional work has proposed learning it using a quasi-distance \cite{wang2023optimalgoalreachingreinforcementlearning}. 
+
